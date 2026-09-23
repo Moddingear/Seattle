@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cpacxfuh1gls2"]
+
+[ext_resource type="PackedScene" uid="uid://df6ub2be831pi" path="res://assets/27brick/stone_stack.tscn" id="1_gss5c"]
+
+[node name="EdgeStack" type="Node3D" unique_id=1198114086]
+
+[node name="StoneStack1" parent="." unique_id=1468109969 instance=ExtResource("1_gss5c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.165, 0)
+
+[node name="StoneStack2" parent="." unique_id=693492955 instance=ExtResource("1_gss5c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24531901, 0.165, 0)
+
+[node name="StoneStack3" parent="." unique_id=189368025 instance=ExtResource("1_gss5c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.245, 0.165, 0)
+
+[node name="StoneStack4" parent="." unique_id=174649699 instance=ExtResource("1_gss5c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.165, 0)

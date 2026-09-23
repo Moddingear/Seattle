@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://df6ub2be831pi"]
+
+[ext_resource type="PackedScene" uid="uid://coikmb18k872m" path="res://assets/27brick/stone.glb" id="1_lwc3g"]
+
+[node name="StoneStack" type="Node3D" unique_id=1468109969]
+
+[node name="stone_bottom" parent="." unique_id=2031051385 instance=ExtResource("1_lwc3g")]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, -0.109765634, 0)
+
+[node name="stone_middle" parent="." unique_id=1148880978 instance=ExtResource("1_lwc3g")]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="stone_top" parent="." unique_id=1287714816 instance=ExtResource("1_lwc3g")]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.11028002, 0)

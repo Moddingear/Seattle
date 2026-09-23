@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ox34aj0gghov"]
+
+[ext_resource type="PackedScene" uid="uid://b2xkcnjn73020" path="res://assets/26nut_case/nut_case.glb" id="1_7scwp"]
+[ext_resource type="Script" uid="uid://bbtut826k0g0e" path="res://assets/26nut_case/nut_case_random_rotation.gd" id="1_frthp"]
+
+[node name="NutCasePack" type="Node3D" unique_id=287034452]
+script = ExtResource("1_frthp")
+
+[node name="nut_case1" parent="." unique_id=610198725 instance=ExtResource("1_7scwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.075)
+
+[node name="nut_case2" parent="." unique_id=1883168284 instance=ExtResource("1_7scwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.025)
+
+[node name="nut_case3" parent="." unique_id=1033102008 instance=ExtResource("1_7scwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.025)
+
+[node name="nut_case4" parent="." unique_id=1552374224 instance=ExtResource("1_7scwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.075)
