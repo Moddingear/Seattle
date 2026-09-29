@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c5ntvcolbmdqg"]
+
+[ext_resource type="PackedScene" uid="uid://donw0qnvokinl" path="res://robot/connection.tscn" id="1_cfcju"]
+
+[node name="Settings" type="TabContainer" unique_id=10220083]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+
+[node name="Connection" parent="." unique_id=1778286730 instance=ExtResource("1_cfcju")]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1588077136]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
