@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://c5ntvcolbmdqg"]
 
 [ext_resource type="PackedScene" uid="uid://donw0qnvokinl" path="res://robot/connection.tscn" id="1_cfcju"]
+[ext_resource type="Script" uid="uid://wgeg2cm6m72p" path="res://robot/network_viewer.gd" id="2_yuged"]
+[ext_resource type="Script" uid="uid://bul14esf26jhy" path="res://robot/lidar.gd" id="3_6dtw0"]
 
 [node name="Settings" type="TabContainer" unique_id=10220083]
 anchors_preset = 15
@@ -8,12 +10,29 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 0
+current_tab = 1
 
 [node name="Connection" parent="." unique_id=1778286730 instance=ExtResource("1_cfcju")]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1588077136]
 visible = false
 layout_mode = 2
+
+[node name="CANetwork" type="VBoxContainer" parent="." unique_id=1588077136]
+layout_mode = 2
+script = ExtResource("2_yuged")
 metadata/_tab_index = 1
+
+[node name="refresh" type="Button" parent="CANetwork" unique_id=1682395751]
+layout_mode = 2
+text = "Refresh actuators"
+
+[node name="Lidar" type="HBoxContainer" parent="." unique_id=1601321275]
+visible = false
+layout_mode = 2
+script = ExtResource("3_6dtw0")
+metadata/_tab_index = 2
+
+[node name="draw_area" type="Control" parent="Lidar" unique_id=74881235]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="pressed" from="CANetwork/refresh" to="CANetwork" method="_on_refresh_pressed"]

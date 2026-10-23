@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://c0e77cihktl0c"]
+
+[ext_resource type="Script" uid="uid://ca0gqg5cxslm4" path="res://robot/actuator.gd" id="1_nei7j"]
+
+[node name="HBoxContainer" type="HBoxContainer" unique_id=1064992400]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nei7j")
+
+[node name="Discriminator" type="Label" parent="." unique_id=1341697413]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+text = "Discriminator"
+
+[node name="UIDButton" type="Button" parent="." unique_id=1829080788]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Get UID"
+
+[node name="UIDText" type="Label" parent="." unique_id=64637365]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "UID"
+
+[node name="JumpBootloader" type="Button" parent="." unique_id=2026257594]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Enter bootloader"
+
+[connection signal="pressed" from="UIDButton" to="." method="_on_uid_button_pressed"]
+[connection signal="pressed" from="JumpBootloader" to="." method="_on_jump_bootloader_pressed"]
