@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="robot_connection_client" format=3 uid="uid://ccnomnrdo2icd"]
+
+[ext_resource type="Resource" uid="uid://bm5sx1yws4dnp" path="res://robot/connections/to_microcontroller.tres" id="1_cqbhu"]
+[ext_resource type="Script" uid="uid://ckayqnk7ugy8j" path="res://robot/connection_client.gd" id="2_kvt1u"]
+
+[resource]
+script = ExtResource("2_kvt1u")
+hostname = "rookie.local"
+port = 58007
+host = ExtResource("1_cqbhu")
+metadata/_custom_type_script = "uid://ckayqnk7ugy8j"

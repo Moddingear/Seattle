@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://b7wm25houi0pj"]
+
+[ext_resource type="Script" uid="uid://cndnei5qyi1vs" path="res://robot/pid_setting.gd" id="1_rr0mw"]
+
+[node name="pid" type="VBoxContainer" unique_id=390895096]
+script = ExtResource("1_rr0mw")
+metadata/_tab_index = 0
+
+[node name="P" type="SpinBox" parent="." unique_id=124596047]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.0
+allow_greater = true
+alignment = 2
+prefix = "P"
+
+[node name="I" type="SpinBox" parent="." unique_id=1951410949]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.0
+allow_greater = true
+alignment = 2
+prefix = "I"
+
+[node name="D" type="SpinBox" parent="." unique_id=676884866]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.0
+allow_greater = true
+alignment = 2
+prefix = "D"
+
+[node name="Limit" type="SpinBox" parent="." unique_id=760216163]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.0
+allow_greater = true
+alignment = 2
+prefix = "Limit"
+
+[node name="Ramp" type="SpinBox" parent="." unique_id=1742660067]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.0
+allow_greater = true
+alignment = 2
+prefix = "Ramp"
+
+[node name="LowPass" type="SpinBox" parent="." unique_id=1857002279]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.0
+allow_greater = true
+alignment = 2
+prefix = "Low pass"
+
+[node name="buttons" type="HBoxContainer" parent="." unique_id=784802304]
+layout_mode = 2
+
+[node name="get" type="Button" parent="buttons" unique_id=1742861111]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Download values"
+
+[node name="set" type="Button" parent="buttons" unique_id=262571712]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Upload values"
+
+[connection signal="pressed" from="buttons/get" to="." method="_on_get_pressed"]

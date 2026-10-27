@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="robot_connection_host" format=3 uid="uid://bm5sx1yws4dnp"]
+
+[ext_resource type="Script" uid="uid://duqphchrn4ccl" path="res://robot/connection_host.gd" id="1_wxb4s"]
+
+[resource]
+script = ExtResource("1_wxb4s")
+port = 58007
+metadata/_custom_type_script = "uid://duqphchrn4ccl"

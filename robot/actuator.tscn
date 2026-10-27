@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ca0gqg5cxslm4" path="res://robot/actuator.gd" id="1_nei7j"]
 
-[node name="HBoxContainer" type="HBoxContainer" unique_id=1064992400]
+[node name="HBoxContainer" type="VBoxContainer" unique_id=552834154]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -10,27 +10,45 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nei7j")
 
-[node name="Discriminator" type="Label" parent="." unique_id=1341697413]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1145386900]
+layout_mode = 2
+
+[node name="Discriminator" type="Label" parent="HBoxContainer" unique_id=1341697413]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
 text = "Discriminator"
 
-[node name="UIDButton" type="Button" parent="." unique_id=1829080788]
+[node name="UIDButton" type="Button" parent="HBoxContainer" unique_id=1829080788]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Get UID"
 
-[node name="UIDText" type="Label" parent="." unique_id=64637365]
+[node name="UIDText" type="Label" parent="HBoxContainer" unique_id=64637365]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "UID"
 
-[node name="JumpBootloader" type="Button" parent="." unique_id=2026257594]
+[node name="PIDEnable" type="CheckButton" parent="HBoxContainer" unique_id=1337925676]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Edit PIDs"
+
+[node name="JumpBootloader" type="Button" parent="HBoxContainer" unique_id=2026257594]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Enter bootloader"
 
-[connection signal="pressed" from="UIDButton" to="." method="_on_uid_button_pressed"]
-[connection signal="pressed" from="JumpBootloader" to="." method="_on_jump_bootloader_pressed"]
+[node name="PIDs" type="TabContainer" parent="." unique_id=988260851]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="pressed" from="HBoxContainer/UIDButton" to="." method="_on_uid_button_pressed"]
+[connection signal="toggled" from="HBoxContainer/PIDEnable" to="." method="_on_pid_enable_toggled"]
+[connection signal="pressed" from="HBoxContainer/JumpBootloader" to="." method="_on_jump_bootloader_pressed"]

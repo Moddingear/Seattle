@@ -1,13 +1,13 @@
 extends Control
 
-@onready var connection : robot_connection = $"../Connection"
+const proto = preload("res://protoc/gd_esp.gd")
+@export var connection : robot_connection_client
+
 @onready var draw_area := $draw_area
 var cutoff_time_us : int
 @export var max_distance = 5
 @export var distance_steps_per_meter = 5
 var last_end_angle = 0;
-
-const proto = preload("res://protoc/gd_esp.gd")
 
 class DisplayPoint:
 	var distance : float
@@ -17,11 +17,11 @@ class DisplayPoint:
 	var time_us : int
 	
 var display_points:Array[DisplayPoint] = []
-
+var recycled_display_points:Array[DisplayPoint] = []
 
 
 func _ready() -> void:
-	connection.register_callback(on_lidar_data, proto.gd_esp_packet.DataCase.LIDAR_DATA);
+	connection.register_callback(on_lidar_data, proto.esp_gd_packet.DataCase.LIDAR_DATA);
 	queue_redraw()
 
 func clamp_angle_rad(angle:float)->float:
@@ -30,27 +30,33 @@ func clamp_angle_rad(angle:float)->float:
 		return wrapped - TAU
 	return wrapped
 	
-func decode_i8f2d14(data: PackedByteArray, offset:int):
-	var point = DisplayPoint.new()
+func decode_i8f2d14(data: PackedByteArray, offset:int, point: DisplayPoint) -> DisplayPoint:
 	point.intensity = data.decode_u8(offset)
 	var distance_flags = data.decode_u16(offset+1)
 	point.flags = distance_flags & 0b11
 	point.distance = (distance_flags >> 2)
 	return point
+
+func angle_filter(test_angle, start_angle, end_angle):
+	if start_angle < end_angle: #normal case
+		return test_angle <= start_angle || test_angle >= end_angle
+	else: #angle wraparound, keep everything between start_angle and end_angle
+		return start_angle >= test_angle && test_angle >= end_angle
 	
-func on_lidar_data(packet: proto.gd_esp_packet):
+func on_lidar_data(packet: proto.esp_gd_packet):
 	var data : proto.LidarData = packet.get_lidar_data()
 	var source_name = data.get_lidar_source()
 	var start_angle_rad = deg_to_rad(data.get_start_angle())
 	var end_angle_rad = deg_to_rad(data.get_end_angle())
 	#print("last end angle %f, end angle %f" % [last_end_angle, end_angle_rad])
 	var nbdisplay_before = len(display_points)
-	display_points = display_points.filter(func(point:DisplayPoint): 
-		if last_end_angle < end_angle_rad: #normal case
-			return point.angle <= last_end_angle || point.angle >= end_angle_rad
-		else: #angle wraparound, keep everything between start_angle and end_angle
-			return last_end_angle >= point.angle && point.angle >= end_angle_rad
-	)
+	var reuse_display_points:Array[DisplayPoint] = []
+	for point in display_points:
+		if angle_filter(point.angle, last_end_angle, end_angle_rad):
+			reuse_display_points.push_back(point)
+		else:
+			recycled_display_points.push_back(point)
+	display_points = reuse_display_points
 	last_end_angle = end_angle_rad
 	var num_purged = nbdisplay_before - len(display_points)
 	#print("Purged %d points by filter" % num_purged)
@@ -78,34 +84,42 @@ func on_lidar_data(packet: proto.gd_esp_packet):
 		var raw = data.get_raw()
 		if len(raw) % bytes_per_point != 0:
 			breakpoint
-		var num_points = len(raw)/bytes_per_point
-		var np_lerp = maxf(num_points-1, 1)
-		for i in len(raw)/bytes_per_point:
-			var display_point :DisplayPoint = decode_function.call(raw, i*bytes_per_point)
+		var num_points :int= len(raw)/bytes_per_point
+		var np_lerp := maxf(num_points-1, 1)
+		var num_invalid = 0
+		for i in num_points:
+			var display_point = recycled_display_points.pop_back()
+			if display_point == null:
+				display_point = DisplayPoint.new()
+			decode_function.call(raw, i*bytes_per_point, display_point)
 			display_point.angle = fposmod(lerpf(start_angle_rad, end_angle_rad, i/np_lerp), TAU)
 			display_point.time_us = time_now
-			display_points.push_back(display_point)
+			if display_point.distance < 0.05:
+				recycled_display_points.push_back(display_point)
+				num_invalid+=1
+				#print("Point too close, index %d/%d, raw %s, flags %d" % [i, num_points, raw.slice(i*bytes_per_point, (i+1)*bytes_per_point).hex_encode(), display_point.flags])
+			else:
+				display_points.push_back(display_point)
+		if num_invalid:
+			pass
+			#printerr("Got %d invalid lidar points" % num_invalid)
 	else:
 		var data_points : Array[proto.LidarData.LidarPoint] = data.get_points()
-		var num_points = len(data_points)
-		var np_lerp = maxf(num_points-1, 1)
+		var num_points := len(data_points)
+		var np_lerp := maxf(num_points-1, 1)
 		for i in num_points:
 			var data_point = data_points[i]
-			var display_point = DisplayPoint.new()
+			var display_point = recycled_display_points.pop_back()
+			if display_point == null:
+				display_point = DisplayPoint.new()
 			display_point.angle = fposmod(lerpf(start_angle_rad, end_angle_rad, i/np_lerp), TAU)
 			display_point.distance = data_point.get_distance()
 			display_point.intensity = data_point.get_luminosity()
 			display_point.flags = 0
 			display_point.time_us = time_now
 			display_points.append(display_point)
-	#cutoff_time_us = time_now - 1000000/6.0 
-	#display_points = display_points.filter(point_filter)
 	queue_redraw()
 
-func point_filter(point:DisplayPoint)->bool:
-	if point.time_us < cutoff_time_us:
-		return false
-	return true
 	
 func _draw() -> void:
 	var area :Rect2= draw_area.get_rect()
@@ -125,8 +139,23 @@ func _draw() -> void:
 		draw_circle(center, radius, Color.GRAY if whole else Color.DIM_GRAY, false)
 		if whole:
 			draw_string(ThemeDB.fallback_font, center + Vector2(radius, 0), "%dm" % [i/distance_steps_per_meter])
-	for point in display_points:
-		var point_location :Vector2 = center + point.distance * dist_to_px * Vector2.from_angle(point.angle)
-		draw_circle(point_location, 2, Color.from_hsv(0,0,sqrt(point.intensity/255.0)))
-		if point.flags:
-			draw_circle(point_location, 1, Color.RED)
+	if 0:
+		for point in display_points:
+			var point_location :Vector2 = center + point.distance * dist_to_px * Vector2.from_angle(point.angle)
+			draw_circle(point_location, 2, Color.from_hsv(0,0,sqrt(point.intensity/255.0)))
+			if point.flags:
+				draw_circle(point_location, 1, Color.RED)
+	else:
+		display_points.sort_custom(func(a:DisplayPoint, b:DisplayPoint):
+			return a.angle < b.angle
+		)
+		var num_points = display_points.size()
+		var coords := PackedVector2Array()
+		coords.resize(num_points)
+		var colors := PackedColorArray()
+		colors.resize(num_points)
+		for i in num_points:
+			var point := display_points[i]
+			coords[i] = center + point.distance * dist_to_px * Vector2.from_angle(point.angle)
+			colors[i] = Color.RED if point.flags else Color.from_hsv(1/3.0,1,sqrt(point.intensity/128.0))
+		draw_polyline_colors(coords, colors, 2)

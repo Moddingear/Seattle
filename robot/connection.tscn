@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://donw0qnvokinl"]
 
-[ext_resource type="Script" uid="uid://duqphchrn4ccl" path="res://robot/connection.gd" id="1_aub0f"]
+[ext_resource type="Script" uid="uid://bt55b50qokccu" path="res://robot/connection_ui.gd" id="1_aub0f"]
 
 [node name="Connection" type="VBoxContainer" unique_id=1778286730]
 anchors_preset = 15
@@ -36,11 +36,5 @@ value = 12345.0
 rounded = true
 prefix = ":"
 
-[node name="connect" type="CheckButton" parent="." unique_id=1458459996]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Connect"
-
 [connection signal="text_submitted" from="addressContainer/address" to="." method="_on_address_text_submitted"]
 [connection signal="value_changed" from="addressContainer/port" to="." method="_on_port_value_changed"]
-[connection signal="toggled" from="connect" to="." method="_on_connect_toggled"]

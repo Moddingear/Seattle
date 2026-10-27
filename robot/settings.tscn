@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c5ntvcolbmdqg"]
 
 [ext_resource type="PackedScene" uid="uid://donw0qnvokinl" path="res://robot/connection.tscn" id="1_cfcju"]
+[ext_resource type="Resource" uid="uid://ccnomnrdo2icd" path="res://robot/connections/rookie.tres" id="2_3kaq7"]
 [ext_resource type="Script" uid="uid://wgeg2cm6m72p" path="res://robot/network_viewer.gd" id="2_yuged"]
 [ext_resource type="Script" uid="uid://bul14esf26jhy" path="res://robot/lidar.gd" id="3_6dtw0"]
 
@@ -15,10 +16,12 @@ current_tab = 1
 [node name="Connection" parent="." unique_id=1778286730 instance=ExtResource("1_cfcju")]
 visible = false
 layout_mode = 2
+connection = ExtResource("2_3kaq7")
 
 [node name="CANetwork" type="VBoxContainer" parent="." unique_id=1588077136]
 layout_mode = 2
 script = ExtResource("2_yuged")
+connection = ExtResource("2_3kaq7")
 metadata/_tab_index = 1
 
 [node name="refresh" type="Button" parent="CANetwork" unique_id=1682395751]
@@ -29,6 +32,7 @@ text = "Refresh actuators"
 visible = false
 layout_mode = 2
 script = ExtResource("3_6dtw0")
+connection = ExtResource("2_3kaq7")
 metadata/_tab_index = 2
 
 [node name="draw_area" type="Control" parent="Lidar" unique_id=74881235]
