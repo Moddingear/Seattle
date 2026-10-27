@@ -13,7 +13,7 @@ class_name robot_connection_client
 	set(new_host):
 		host = new_host
 		_init()
-const ptype = preload("res://robot/connection_host.gd")
+const ptype = preload("res://communication/connection_host.gd")
 var peer :ptype.Peer = null
 
 const proto = preload("res://protoc/gd_esp.gd")

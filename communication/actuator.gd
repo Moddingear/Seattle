@@ -4,7 +4,7 @@ class_name Actuator
 
 const proto = preload("res://protoc/gd_esp.gd")
 var connection : robot_connection_client = null
-const pid_scene = preload("res://robot/pid_setting.tscn")
+const pid_scene = preload("res://communication/pid_setting.tscn")
 
 var pids : Dictionary[proto.PIDData.Loop, PIDSetting] = {}
 

@@ -5,7 +5,7 @@ class_name NetworkViewer
 const proto = preload("res://protoc/gd_esp.gd")
 @export var connection : robot_connection_client
 
-const actuator = preload("res://robot/actuator.tscn")
+const actuator = preload("res://communication/actuator.tscn")
 var actuators :Dictionary[int, Actuator] = {}
 
 func _ready() -> void:
